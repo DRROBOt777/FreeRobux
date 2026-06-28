@@ -1,7 +1,12 @@
 import sys
 import os
+import subprocess
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+# Rb.pyx ကို compile လုပ်ပြီး Rb.so ဖန်တီးပါ
+if not os.path.exists("Rb.so"):
+    subprocess.run(["cythonize", "-i", "Rb.pyx"])
 
 try:
     import Rb
@@ -10,7 +15,6 @@ except ImportError as e:
     print(f"[-] Failed to load Rb.so: {e}")
     sys.exit(1)
 
-# Flask app object ကို ရယူပါ
 if hasattr(Rb, 'app'):
     app = Rb.app
     print("[+] Flask app object found")
